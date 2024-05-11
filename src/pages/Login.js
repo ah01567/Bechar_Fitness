@@ -1,5 +1,8 @@
 import * as React from 'react';
 import { useState } from 'react';
+import { auth } from '../firebase';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { NavLink, useNavigate } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -13,13 +16,31 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 const Login = () => {
+
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    // Add login logic here, e.g., send login request to server
-    console.log('Login clicked');
+  const handleLogin = async (event) => {
+    event.preventDefault();
+        signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+            // Signed in
+            const user = userCredential.user;
+            navigate("/")
+            console.log('User has successfully logged in');
+            console.log(user);
+        })
+        .catch((error) => {
+           if (error.code === "auth/user-not-found") {
+                setError("This email address is not valid. please register first");
+             } else if (error.code === "auth/wrong-password") {
+                setError("Incorrect password. Try again");
+            } else if (error.code === "auth/invalid-email") {
+                setError("This email is not valid. Please check your email");
+            }
+         })
   };
 
   const defaultTheme = createTheme

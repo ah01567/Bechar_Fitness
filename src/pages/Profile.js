@@ -1,11 +1,17 @@
 import React from 'react';
+import Login from './Login';
+import useAuth from "./currentUser";
 
 const Profile = () => {
-  return (
-      <div>
-        <h1>Profile page</h1>
-      </div>
-  );
-};
-
-export default Profile;
+    const { currentUser } = useAuth();
+ 
+    return(
+        <div>
+            {!currentUser ? (<div><Login /></div>) : (            
+            <div> Profile page page </div>
+            )}
+        </div>
+    )
+}
+ 
+export default Profile
