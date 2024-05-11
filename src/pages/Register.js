@@ -1,4 +1,6 @@
 import * as React from 'react';
+import { auth } from '../firebase';
+import {createUserWithEmailAndPassword} from 'firebase/auth';
 import { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -20,14 +22,14 @@ const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      dob: data.get('dob'),
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    try{
+      await createUserWithEmailAndPassword(auth, email, password);
+      console.log('User suucessfully registered !!');
+    } catch (error) {
+      console.error('Error registering user:', error.message);
+    }
   };
 
   return (
