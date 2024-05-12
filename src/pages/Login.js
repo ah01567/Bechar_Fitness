@@ -49,7 +49,7 @@ const Login = () => {
   const defaultTheme = createTheme
   return (
     <div>
-      {error && <Alert severity="error" onClose={() => {}}>{error}</Alert> }   
+      {error && <Alert severity="error" onClose={() => setError('')}>{error}</Alert> }   
         <ThemeProvider theme={defaultTheme}>
           <Container component="main" maxWidth="xs">
             <CssBaseline />

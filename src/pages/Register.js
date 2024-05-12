@@ -28,7 +28,9 @@ const Register = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (password !== confirmedPassword) {
+    if (!fname || !lname || !dob || !email || !password || !confirmedPassword) {
+      setError('Make sure to fill in all information');
+    } else if (password !== confirmedPassword) {
       setError("Passwords don't match");
     } else {
     try{
@@ -50,7 +52,7 @@ const Register = () => {
 
   return (
     <div>
-      {error && <Alert severity="error" onClose={() => {}}>{error}</Alert> }   
+      {error && <Alert severity="error" onClose={() => setError('')}>{error}</Alert> }   
       <ThemeProvider theme={createTheme()}>
         <Container component="main" maxWidth="xs">
           <CssBaseline />
