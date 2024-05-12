@@ -6,8 +6,8 @@ import { auth } from '../firebase';
 export default function useAuth() {
 
     const [currentUser, setCurrentUser] = useState(null);  
-    const [isAdmin, setIsAdmin] = useState(false);
-    const [firebaseInitialized, setFirebaseInitialized] = useState(false);
+    //const [isAdmin, setIsAdmin] = useState(false);
+    //const [firebaseInitialized, setFirebaseInitialized] = useState(false);
 
     useEffect(()=>{
         onAuthStateChanged(auth, (user) => {
@@ -17,5 +17,6 @@ export default function useAuth() {
         });
         
     }, [])
-    return { currentUser, isAdmin, firebaseInitialized };
+    //return { currentUser, isAdmin, firebaseInitialized };
+    return { currentUser };
 }
