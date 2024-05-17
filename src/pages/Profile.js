@@ -67,6 +67,19 @@ const Profile = () => {
                             <TextField
                                 required
                                 fullWidth
+                                id="email"
+                                label="Email Address"
+                                name="email"
+                                autoComplete="email"
+                                //value={email}
+                                //onChange={(e) => setEmail(e.target.value)}
+                                
+                            />
+                        </Grid>
+                            <Grid item xs={12}>
+                            <TextField
+                                required
+                                fullWidth
                                 id="dob"
                                 label="Date of Birth"
                                 name="dob"
@@ -112,20 +125,17 @@ const Profile = () => {
                                 </Select>
                             </FormControl>
                         </Grid>
-
                         <Grid item xs={12}>
-                            <TextField
-                                required
-                                fullWidth
-                                id="email"
-                                label="Email Address"
-                                name="email"
-                                autoComplete="email"
-                                //value={email}
-                                //onChange={(e) => setEmail(e.target.value)}
-                            />
+                        <TextField
+                            name="phoneNumber"
+                            fullWidth
+                            id="phoneNumber"
+                            label="Phone Number"
+                            //value={phoneNumber}
+                            //onChange={(e) => setPhoneNumber(e.target.value)}
+                            //disabled={!isEditing}
+                        />
                         </Grid>
-                        
                         </Grid>
                         <Grid item xs={12} sx={{ mt: 2 }} display="flex" justifyContent="space-between">
                             <Button
@@ -144,16 +154,6 @@ const Profile = () => {
                             >
                                 Save
                             </Button>
-                        </Grid>
-                        <Grid item xs={12} sx={{ mt: 2 }}>
-                            <Button
-                                variant="contained"
-                                color="error"
-                                //onClick={handleDeleteAccount}
-                                fullWidth
-                            >
-                                Delete Account
-                            </Button> <break/>
                         </Grid>
                         </Box>
                     </Box>
