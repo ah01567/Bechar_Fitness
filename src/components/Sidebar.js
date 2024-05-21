@@ -71,6 +71,7 @@ const SideBar = () => {
                     </ListItem>
                 ))}
             </List> 
+            <Divider />
             </div>)}
         </div>
     )
