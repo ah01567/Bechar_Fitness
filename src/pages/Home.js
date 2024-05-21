@@ -3,28 +3,26 @@ import Login from './Login';
 import useAuth from "./currentUser";
 import { auth } from '../firebase';
 import { signOut } from 'firebase/auth';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import SideBar from "../components/Sidebar";
+
 const Home = () => {
     const { currentUser } = useAuth();
     const navigate = useNavigate();
-    
-    const handleLogout = () => {               
-        signOut(auth).then(() => {
-        // Sign-out successful.
-            navigate("/login");
-            console.log("Signed out successfully")
-        }).catch((error) => {
-            console.log(error);
-        });
-      }
 
     return(
         <div>
-            {!currentUser ? (<div><Login /></div>) : (        
-            <div>    
-                <div> Home page </div>
-                <button onClick={handleLogout}>Logout</button>
-            </div>
+            {!currentUser ? (
+                <div><Login /></div>
+            ) : (
+                <div style={{display: 'flex', height: '100vh'  }}>
+                    <div style={{ borderRight: '1px solid #ccc', paddingRight: '10px', height: '100%'  }}>
+                        <SideBar />
+                    </div>
+                    <div style={{ padding: '20px' }}>
+                        <div>Home page</div>
+                    </div>
+                </div>
             )}
         </div>
     )
