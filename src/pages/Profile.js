@@ -11,9 +11,18 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Login from './Login';
 import useAuth from "./currentUser";
 import SideBar from "../components/Sidebar";
+import Spinner from '../components/Spinner';
 
 const Profile = () => {
-    const { currentUser } = useAuth();
+    const { currentUser, firebaseInitialized } = useAuth();
+
+    if (!firebaseInitialized) {
+        return( 
+            <div> 
+                <Spinner /> 
+            </div>
+        )
+      } 
 
     return(
         <div>

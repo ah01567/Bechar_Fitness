@@ -38,10 +38,10 @@ const SideBar = () => {
     return(
         <div>
             <Toolbar />
-            <Divider />
-            <IconButton onClick={toggleDrawer} style={{ position: 'fixed', top: '10px' }}>
+            <IconButton onClick={toggleDrawer} style={{ position: 'absolute', top: '10px' }}>
                 <MenuIcon />
             </IconButton>
+            <Divider />
             {isOpen && (
             <div>
             <List>
