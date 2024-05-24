@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../firebase';
 import { signOut } from 'firebase/auth';
-import { Divider, IconButton, Drawer } from '@mui/material';
+import { Divider, IconButton } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import HomeIcon from '@mui/icons-material/Home';
 import List from '@mui/material/List';
@@ -36,22 +36,22 @@ const SideBar = () => {
       }
 
     return(
-        <div>
+        <div style={{backgroundColor: 'Black', width: '102%'}}>
             <Toolbar />
-            <IconButton onClick={toggleDrawer} style={{ position: 'absolute', top: '10px' }}>
+            <IconButton onClick={toggleDrawer} style={{ position: 'absolute', top: '10px', color: 'yellow' }}>
                 <MenuIcon />
             </IconButton>
             <Divider />
             {isOpen && (
-            <div>
+            <div style={{backgroundColor: 'White'}}>
             <List>
                 {['Home', 'Profile', 'Policy'].map((text, index) => (
                     <ListItem key={text} disablePadding>
                     <ListItemButton onClick={() => navigate(index === 0 ? '/' : index === 1 ? '/profile' : '/policy')}>
                         <ListItemIcon>
-                        {index == 0 ? <HomeIcon fontSize="large"/> : 
-                        index == 1 ? <AccountCircleIcon fontSize="large"/> : 
-                        index == 2 ? <PolicyIcon fontSize="large"/> : null}
+                        {index === 0 ? <HomeIcon fontSize="large"/> : 
+                        index === 1 ? <AccountCircleIcon fontSize="large"/> : 
+                        index === 2 ? <PolicyIcon fontSize="large"/> : null}
                         </ListItemIcon>
                         <ListItemText primary={text} />
                     </ListItemButton>
@@ -64,7 +64,7 @@ const SideBar = () => {
                     <ListItem key={text} disablePadding>
                     <ListItemButton onClick={handleLogout}>
                         <ListItemIcon>
-                        {index == 0 ? <LogoutIcon fontSize="large"/> : null}
+                        {index === 0 ? <LogoutIcon fontSize="large"/> : null}
                         </ListItemIcon>
                         <ListItemText primary={text} />
                     </ListItemButton>

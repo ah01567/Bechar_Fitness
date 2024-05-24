@@ -42,10 +42,10 @@ const Register = () => {
         .then((userCredential) => {
             const user = userCredential.user;
             const uid = user.uid;
-            console.log(user);
             
             const userRef = ref(db, `Users/${uid}`);
             const userData = {
+                img: '',
                 fname: fname,
                 lname: lname, 
                 phone: phone,
