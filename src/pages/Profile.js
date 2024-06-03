@@ -21,7 +21,6 @@ const MAX_IMAGE_SIZE = 7 * 1024 * 1024;
 const Profile = () => {
     const navigate = useNavigate();
     const [error, setError] = useState('')
-    const [inputsEnabled, setInputsEnabled] = useState(false); 
 
     const { currentUser, firebaseInitialized } = useAuth();
     const [selectedImage, setSelectedImage] = useState('');
@@ -29,8 +28,12 @@ const Profile = () => {
     const [lname, setLname] = useState('');
     const [phone, setPhoneNumber] = useState('');
     const [email, setEmail] = useState('');
-    const [dob, setDob] = useState('');
     const [gender, setGender] = useState('');
+    const [membership, setMembership] = useState('');
+    const [start, setStart] = useState();
+    const [expiry, setExpiry] = useState();
+    const [paid, setPaid] = useState();
+    const [debt, setDebt] = useState();
 
         //Fetch User's credentials from Database for display 
         useEffect(() => {
@@ -47,10 +50,14 @@ const Profile = () => {
                 setSelectedImage(data.selectedImage); 
                 setFname(data.fname); 
                 setLname(data.lname);
-                setDob(data.dob);
                 setGender(data.gender);
                 setPhoneNumber(data.phone);
                 setEmail(data.email);
+                setMembership(data.membership);
+                setStart(data.start);
+                setExpiry(data.expiry);
+                setPaid(data.paid);
+                setDebt(data.debt);
             }
             });
         }, [currentUser?.uid]);
@@ -90,10 +97,14 @@ const Profile = () => {
             selectedImage: selectedImage,
             fname: fname,
             lname: lname, 
-            dob: dob, 
             gender: gender, 
+            membership: membership,
             email: email,
-            phone: phone
+            phone: phone,
+            start: start,
+            expiry: expiry,
+            paid: paid,
+            debt: debt,
         };
         set(userRef, newData);
         navigate('/');
@@ -146,7 +157,7 @@ const Profile = () => {
 
 
                             <Box component="form" noValidate sx={{ mt: 3 }}>
-                            <Grid container spacing={2}>
+                        <Grid container spacing={2}>
                                 <Grid item xs={12} sm={6}>
                                 <TextField
                                     autoComplete="given-name"
@@ -174,6 +185,17 @@ const Profile = () => {
                                 </Grid>
                                 <Grid item xs={12}>
                                 <TextField
+                                    name="phoneNumber"
+                                    fullWidth
+                                    id="phoneNumber"
+                                    label="Phone Number"
+                                    value={phone}
+                                    onChange={(e) => setPhoneNumber(e.target.value)}
+                                    //disabled={!isEditing}
+                                />
+                                </Grid>
+                                <Grid item xs={12}>
+                                <TextField
                                     required
                                     fullWidth
                                     id="email"
@@ -185,21 +207,6 @@ const Profile = () => {
                                     
                                 />
                             </Grid>
-                                <Grid item xs={12}>
-                                <TextField
-                                    required
-                                    fullWidth
-                                    id="dob"
-                                    label="Date of Birth"
-                                    name="dob"
-                                    type="date"
-                                    value={dob}
-                                    //onChange={(e) => setDob(e.target.value)}
-                                InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                />
-                            </Grid>
                             <Grid item xs={12}>
                                 <FormControl fullWidth>
                                     <InputLabel id="gender-label">Gender</InputLabel>
@@ -208,44 +215,118 @@ const Profile = () => {
                                     id="gender"
                                     value={gender}
                                     label="Gender"
-                                    //onChange={(e) => setGender(e.target.value)}
-                                    //disabled={!isEditing}
+                                    onChange={(e) => setGender(e.target.value)}
                                     >
-                                    <MenuItem value="Female">Female</MenuItem>
-                                    <MenuItem value="Male">Male</MenuItem>
+                                        <MenuItem value="Female">Female</MenuItem>
+                                        <MenuItem value="Male">Male</MenuItem>
                                     </Select>
                                 </FormControl>
                             </Grid>
 
                             <Grid item xs={12} >
-                                <FormControl fullWidth disabled>
+                                <FormControl fullWidth>
                                     <InputLabel id="membership-label">Membership type</InputLabel>
                                     <Select
                                     labelId="membership-label"
                                     id="membership"
-                                    value={gender}
+                                    value={membership}
                                     label="Membership type"
-                                    onChange={(e) => setGender(e.target.value)}
-                                    //disabled={!isEditing}
+                                    onChange={(e) => setMembership(e.target.value)}
                                     >
-                                        <MenuItem value="Daily pass">Daily pass</MenuItem>
-                                        <MenuItem value="Monthly">Monthly </MenuItem>
-                                        <MenuItem value="Yearly">Yearly </MenuItem>
+                                        <MenuItem value="Bodybuilding">Bodybuilding</MenuItem>
+                                        <MenuItem value="Cardio">Cardio </MenuItem>
+                                        <MenuItem value="Bodybuilding & Cardio">Bodybuilding & Cardio </MenuItem>
+                                        <MenuItem value="Bodybuilding with coaching">Bodybuilding with coaching </MenuItem>
+                                        <MenuItem value="Bodybuilding & Cardio with coaching">Bodybuilding & Cardio with coaching </MenuItem>
+                                        <MenuItem value="Women">Women </MenuItem>
                                     </Select>
                                 </FormControl>
                             </Grid>
-                            <Grid item xs={12}>
-                            <TextField
-                                name="phoneNumber"
-                                fullWidth
-                                id="phoneNumber"
-                                label="Phone Number"
-                                value={phone}
-                                onChange={(e) => setPhoneNumber(e.target.value)}
-                                //disabled={!isEditing}
-                            />
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    autoComplete="start-date"
+                                    name="start"
+                                    required
+                                    fullWidth
+                                    id="start"
+                                    type="date"
+                                    label="Start date"
+                                    value={start}
+                                    onChange={(e) => setStart(e.target.value)}
+                                    autoFocus
+                                />
                             </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    autoComplete="expiry-date"
+                                    name="expiry"
+                                    required
+                                    fullWidth
+                                    id="expiry"
+                                    type="date"
+                                    label="Expiry date"
+                                    value={expiry}
+                                    onChange={(e) => setExpiry(e.target.value)}
+                                    autoFocus
+                                />
                             </Grid>
+
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    autoComplete="Paid"
+                                    name="paid"
+                                    required
+                                    fullWidth
+                                    id="paid"
+                                    label="Total paid (DZD)"
+                                    value={paid}
+                                    onChange={(e) => setPaid(e.target.value)}
+                                    autoFocus
+                                    sx={{
+                                        '& .MuiInputBase-input': {
+                                            color: 'green',
+                                        },
+                                        '& .MuiInput-underline:before': {
+                                            borderBottom: '2px solid green',
+                                        },
+                                        '& .MuiInput-underline:hover:before': {
+                                            borderBottom: '2px solid darkgreen',
+                                        },
+                                        '& .MuiInput-underline:after': {
+                                            borderBottom: '2px solid green',
+                                        },
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    autoComplete="debt"
+                                    name="debt"
+                                    required
+                                    fullWidth
+                                    id="debt"
+                                    label="Debt (DZD)"
+                                    value={debt}
+                                    onChange={(e) => setDebt(e.target.value)}
+                                    autoFocus
+                                    sx={{
+                                        '& .MuiInputBase-input': {
+                                            color: 'red',
+                                        },
+                                        '& .MuiInput-underline:before': {
+                                            borderBottom: '2px solid red',
+                                        },
+                                        '& .MuiInput-underline:hover:before': {
+                                            borderBottom: '2px solid darkred',
+                                        },
+                                        '& .MuiInput-underline:after': {
+                                            borderBottom: '2px solid red',
+                                        },
+                                    }}
+                                />
+                            </Grid>
+                        </Grid>
+                            
                             <Grid item xs={12} sx={{ mt: 2 }} display="flex" justifyContent="space-between">
 
                                 <Button
