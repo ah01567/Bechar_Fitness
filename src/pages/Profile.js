@@ -23,17 +23,17 @@ const Profile = () => {
     const [error, setError] = useState('')
 
     const { currentUser, firebaseInitialized } = useAuth();
-    const [selectedImage, setSelectedImage] = useState('');
+    const [img, setSelectedImage] = useState('');
     const [fname, setFname] = useState('');
     const [lname, setLname] = useState('');
     const [phone, setPhoneNumber] = useState('');
     const [email, setEmail] = useState('');
     const [gender, setGender] = useState('');
-    const [membership, setMembership] = useState('');
-    const [start, setStart] = useState('');
-    const [expiry, setExpiry] = useState('');
-    const [paid, setPaid] = useState('');
-    const [debt, setDebt] = useState('');
+    const [membershipType, setMembership] = useState('');
+    const [startDate, setStart] = useState('');
+    const [expiryDate, setExpiry] = useState('');
+    const [totalPaid, setPaid] = useState('');
+    const [debts, setDebt] = useState('');
 
         //Fetch User's credentials from Database for display 
         useEffect(() => {
@@ -48,17 +48,17 @@ const Profile = () => {
             onValue(dbRef, (snapshot) => {
             const data = snapshot.val();
             if (data) { // check if data is not null or undefined
-                setSelectedImage(data.selectedImage); 
+                setSelectedImage(data.img); 
                 setFname(data.fname); 
                 setLname(data.lname);
                 setGender(data.gender);
                 setPhoneNumber(data.phone);
                 setEmail(data.email);
-                setMembership(data.membership);
-                setStart(data.start);
-                setExpiry(data.expiry);
-                setPaid(data.paid);
-                setDebt(data.debt);
+                setMembership(data.membershipType);
+                setStart(data.startDate);
+                setExpiry(data.expiryDate);
+                setPaid(data.totalPaid);
+                setDebt(data.debts);
             }
             });
         }, [currentUser?.uid]);
@@ -95,17 +95,17 @@ const Profile = () => {
         const currentUserID = currentUser?.uid;
         const userRef = ref(getDatabase(), `Users/${currentUserID}`);
         const newData = {
-            selectedImage: selectedImage || '',
+            img: img || '',
             fname: fname || '',
             lname: lname || '', 
             gender: gender || '',
-            membership: membership || '',
+            membershipType: membershipType || '',
             email: email || '',
             phone: phone || '',
-            start: start || '',
-            expiry: expiry || '',
-            paid: paid || '',
-            debt: debt || '',
+            startDate: startDate || '',
+            expiryDate: expiryDate || '',
+            totalPaid: totalPaid || '',
+            debts: debts || '',
         };
         set(userRef, newData);
         navigate('/');
@@ -132,10 +132,9 @@ const Profile = () => {
                             alignItems: 'center',
                             }}
                         >
-
-
+                            
                             <Avatar
-                                src={selectedImage || "/Users/ahmedhenine/Desktop/fitness/src/imgs/pfp.png"}
+                                src={img || "/Users/ahmedhenine/Desktop/fitness/src/imgs/pfp.png"}
                                 sx={{ width: 170, height: 170, border: '1px solid Black' }}
                             />
                             <Button
@@ -234,7 +233,7 @@ const Profile = () => {
                                     <Select
                                     labelId="membership-label"
                                     id="membership"
-                                    value={membership}
+                                    value={membershipType}
                                     label="Membership type"
                                     onChange={(e) => setMembership(e.target.value)}
                                     disabled
@@ -256,7 +255,7 @@ const Profile = () => {
                                     fullWidth
                                     id="start"
                                     type="date"
-                                    value={start}
+                                    value={startDate}
                                     label="Start date"
                                     //onChange={(e) => setStart(e.target.value)}
                                     autoFocus
@@ -272,7 +271,7 @@ const Profile = () => {
                                     id="expiry"
                                     type="date"
                                     label="Expiry date"
-                                    value={expiry}
+                                    value={expiryDate}
                                     //onChange={(e) => setExpiry(e.target.value)}
                                     autoFocus
                                     disabled
@@ -287,7 +286,7 @@ const Profile = () => {
                                     fullWidth
                                     id="paid"
                                     label="Total paid (DZD)"
-                                    value={paid}
+                                    value={totalPaid}
                                     //onChange={(e) => setPaid(e.target.value)}
                                     autoFocus
                                     disabled
@@ -315,7 +314,7 @@ const Profile = () => {
                                     fullWidth
                                     id="debt"
                                     label="Debt (DZD)"
-                                    value={debt}
+                                    value={debts}
                                     //onChange={(e) => setDebt(e.target.value)}
                                     autoFocus
                                     disabled

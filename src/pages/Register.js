@@ -34,41 +34,63 @@ const Register = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (!fname || !lname || !phone || !email || !password || !confirmedPassword) {
-      setError('Make sure to fill in all information');
+        setError('Make sure to fill in all information');
     } else if (password !== confirmedPassword) {
-      setError("Passwords don't match");
+        setError("Passwords don't match");
     } else {
-      await createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-            const user = userCredential.user;
-            const uid = user.uid;
-            
-            const userRef = ref(db, `Users/${uid}`);
-            const userData = {
-                img: '',
-                fname: fname,
-                lname: lname, 
-                phone: phone,
-                email: email,
-              };
-              set(userRef, userData);
-              // Take user to home page:
-              navigate("/")
-        })
-        .catch((error) => {
-            if(error.code === "auth/email-already-in-use") {
-                 setError("This email is already registered. Please Log in");
-            } else if (error.code === "auth/invalid-email") {
-                 setError("This email address is not valid.");
-             } else if (error.code === "auth/operation-not-allowed") {
-                 setError("Operation not allowed.");
-             } else if (error.code === "auth/weak-password") {
-                 setError("Your password is too weak.");
-             }
-         }
-        );
-  }
-  };
+        await createUserWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                const user = userCredential.user;
+                const uid = user.uid;
+
+                // Add user UID to 'Pending' DB
+                const pendingRef = ref(db, `Pending/${uid}`);
+                const pendingData = {
+                  uid: uid,
+                  fname: fname,
+                  lname: lname,
+                  phone: phone,
+                  email: email,
+                };
+                set(pendingRef, pendingData)
+                    .then(() => {
+                        // Add user details to 'Users' DB
+                        const userRef = ref(db, `Users/${uid}`);
+                        const userData = {
+                            img: '',
+                            fname: fname,
+                            lname: lname,
+                            phone: phone,
+                            email: email,
+                        };
+                        set(userRef, userData)
+                            .then(() => {
+                                // Take user to home page
+                                navigate("/");
+                            })
+                            .catch((error) => {
+                                console.error("Error adding user to Users DB:", error);
+                            });
+                    })
+                    .catch((error) => {
+                        console.error("Error adding user to Pending DB:", error);
+                    });
+            })
+            .catch((error) => {
+                if (error.code === "auth/email-already-in-use") {
+                    setError("This email is already registered. Please Log in");
+                } else if (error.code === "auth/invalid-email") {
+                    setError("This email address is not valid.");
+                } else if (error.code === "auth/operation-not-allowed") {
+                    setError("Operation not allowed.");
+                } else if (error.code === "auth/weak-password") {
+                    setError("Your password is too weak.");
+                } else {
+                    console.error("Error creating user:", error);
+                }
+            });
+    }
+};
 
   return (
     <div>
