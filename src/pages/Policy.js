@@ -3,11 +3,9 @@ import Login from './Login';
 import useAuth from "./currentUser";
 import SideBar from "../components/Sidebar";
 import Spinner from '../components/Spinner';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import { QRCodeCanvas } from 'qrcode.react';
+import workInProgress from '../imgs/work-in-progress.png'; 
 
-const Home = () => {
+const Policy = () => {
     const { currentUser, firebaseInitialized } = useAuth();
 
     if (!firebaseInitialized) {
@@ -28,19 +26,11 @@ const Home = () => {
                         <SideBar />
                     </div>
                     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '20px' }}>
-                    <h1>Welcome to Bechar Fitness!</h1>
-                    <Card style={{ marginTop: '50px', width: '300px' }}>
-                    <CardContent>
-                        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '10px' }}>
-                        <QRCodeCanvas value={currentUser.uid} size={200} />
-                        </div>
-                    </CardContent>
-                    </Card>
-                    <h3>Scan the above QR code</h3>
-              </div>
+                        <img src={workInProgress} alt="Policy" style={{ marginTop: '10px', maxWidth: '40%', height: 'auto' }} />
+                    </div>
                 </div>
             )}
         </div>
     )
 }
-export default Home
+export default Policy

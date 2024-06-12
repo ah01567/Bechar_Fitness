@@ -1,7 +1,11 @@
 import * as React from 'react';
 import { auth } from '../firebase';
+import { db } from '../firebase';
 import {createUserWithEmailAndPassword} from 'firebase/auth';
+import { ref, set } from "firebase/database";
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -16,10 +20,11 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Alert from '@mui/material/Alert';
 
 const Register = () => {
+  const navigate = useNavigate();
 
   const [fname, setFname] = useState('');
   const [lname, setLname] = useState('');
-  const [dob, setDob] = useState('');
+  const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmedPassword, setConfirmedPassword] = useState('');
@@ -28,27 +33,64 @@ const Register = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (!fname || !lname || !dob || !email || !password || !confirmedPassword) {
-      setError('Make sure to fill in all information');
+    if (!fname || !lname || !phone || !email || !password || !confirmedPassword) {
+        setError('Make sure to fill in all information');
     } else if (password !== confirmedPassword) {
-      setError("Passwords don't match");
+        setError("Passwords don't match");
     } else {
-    try{
-      await createUserWithEmailAndPassword(auth, email, password);
-      console.log('User suucessfully registered !!');
-    } catch (error) {
-      if(error.code === "auth/email-already-in-use") {
-        setError("This email is already registered. Please sign in");
-   } else if (error.code === "auth/invalid-email") {
-        setError("This email address is not valid.");
-    } else if (error.code === "auth/operation-not-allowed") {
-        setError("Operation not allowed.");
-    } else if (error.code === "auth/weak-password") {
-        setError("Your password is too weak.");
+        await createUserWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                const user = userCredential.user;
+                const uid = user.uid;
+
+                // Add user UID to 'Pending' DB
+                const pendingRef = ref(db, `Pending/${uid}`);
+                const pendingData = {
+                  uid: uid,
+                  fname: fname,
+                  lname: lname,
+                  phone: phone,
+                  email: email,
+                };
+                set(pendingRef, pendingData)
+                    .then(() => {
+                        // Add user details to 'Users' DB
+                        const userRef = ref(db, `Users/${uid}`);
+                        const userData = {
+                            img: '',
+                            fname: fname,
+                            lname: lname,
+                            phone: phone,
+                            email: email,
+                        };
+                        set(userRef, userData)
+                            .then(() => {
+                                // Take user to home page
+                                navigate("/");
+                            })
+                            .catch((error) => {
+                                console.error("Error adding user to Users DB:", error);
+                            });
+                    })
+                    .catch((error) => {
+                        console.error("Error adding user to Pending DB:", error);
+                    });
+            })
+            .catch((error) => {
+                if (error.code === "auth/email-already-in-use") {
+                    setError("This email is already registered. Please Log in");
+                } else if (error.code === "auth/invalid-email") {
+                    setError("This email address is not valid.");
+                } else if (error.code === "auth/operation-not-allowed") {
+                    setError("Operation not allowed.");
+                } else if (error.code === "auth/weak-password") {
+                    setError("Your password is too weak.");
+                } else {
+                    console.error("Error creating user:", error);
+                }
+            });
     }
-    }
-  }
-  };
+};
 
   return (
     <div>
@@ -99,17 +141,14 @@ const Register = () => {
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
+                    autoComplete="phone"
+                    name="phone"
                     required
                     fullWidth
-                    id="dob"
-                    label="Date of Birth"
-                    name="dob"
-                    type="date"
-                    value={dob}
-                    onChange={(e) => setDob(e.target.value)}
-                  InputLabelProps={{
-                        shrink: true,
-                    }}
+                    id="phone"
+                    label="Phone Number"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
                   />
               </Grid>
                 <Grid item xs={12}>
