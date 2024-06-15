@@ -60,11 +60,11 @@ const History = () => {
                                         <Typography><b>Membership {index + 1}</b></Typography>
                                     </AccordionSummary>
                                     <AccordionDetails>
-                                        <div>Membership Type: {history[startDate].membershipType}</div>
-                                        <div>Start date: {startDate}</div>
-                                        <div>Expiry date: {history[startDate].expiryDate}</div>
-                                        <div>Paid: {history[startDate].totalPaid}</div>
-                                        <div>Debts: {history[startDate].debts}</div>
+                                        <div><b>Membership Type:</b> {history[startDate].membershipType}</div>
+                                        <div><b>Start date:</b> {startDate}</div>
+                                        <div><b>Expiry date:</b> {history[startDate].expiryDate}</div>
+                                        <div><b>Paid:</b> {history[startDate].totalPaid}</div>
+                                        <div><b>Debts:</b> {history[startDate].debts}</div>
                                     </AccordionDetails>
                                 </Accordion>
                             ))
