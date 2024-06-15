@@ -6,6 +6,7 @@ import { signOut } from 'firebase/auth';
 import { Divider, IconButton } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import HomeIcon from '@mui/icons-material/Home';
+import HistoryIcon from '@mui/icons-material/History';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -45,13 +46,14 @@ const SideBar = () => {
             {isOpen && (
             <div style={{backgroundColor: 'White'}}>
             <List>
-                {['Home', 'Profile', 'Policy'].map((text, index) => (
+                {['Home', 'Profile', 'History', 'Policy'].map((text, index) => (
                     <ListItem key={text} disablePadding>
-                    <ListItemButton onClick={() => navigate(index === 0 ? '/' : index === 1 ? '/profile' : '/policy')}>
+                    <ListItemButton onClick={() => navigate(index === 0 ? '/' : index === 1 ? '/profile' : index === 2 ? '/history' : '/policy')}>
                         <ListItemIcon>
                         {index === 0 ? <HomeIcon fontSize="large"/> : 
                         index === 1 ? <AccountCircleIcon fontSize="large"/> : 
-                        index === 2 ? <PolicyIcon fontSize="large"/> : null}
+                        index === 2 ? <HistoryIcon fontSize="large"/> : 
+                        index === 3 ? <PolicyIcon fontSize="large"/> : null}
                         </ListItemIcon>
                         <ListItemText primary={text} />
                     </ListItemButton>
