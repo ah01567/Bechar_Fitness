@@ -497,6 +497,11 @@ const Admin = () => {
                                     variant="standard"
                                     value={editableUser.totalPaid || ''}
                                     onChange={handleChange}
+                                    sx={{ 
+                                        '& .MuiInputBase-root': {
+                                            color: 'green',
+                                        }
+                                    }}
                                 />
                                 <TextField
                                     margin="dense"
@@ -507,6 +512,11 @@ const Admin = () => {
                                     variant="standard"
                                     value={editableUser.debts || ''}
                                     onChange={handleChange}
+                                    sx={{ 
+                                        '& .MuiInputBase-root': {
+                                            color: 'red',
+                                        }
+                                    }}
                                 />
                             </DialogContentText>
                         </DialogContent>
