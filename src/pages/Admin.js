@@ -3,6 +3,7 @@ import { Box, Card, CardContent, Container, CssBaseline, Dialog, DialogTitle, Di
 import { ref, onValue, getDatabase, set, remove } from 'firebase/database';
 import { getStorage, ref as storageRef, deleteObject } from "firebase/storage";
 import Alert from '@mui/material/Alert';
+import Avatar from '@mui/material/Avatar';
 
 const Admin = () => {
     const [error, setError] = useState('');
@@ -61,6 +62,7 @@ const Admin = () => {
         setOpen(false);
         setSelectedUser(null);
         setEditableUser({});
+        setError('');
     };
 
     const handleChange = (event) => {
@@ -270,15 +272,21 @@ const handleRemoveProfilePic = async () => {
                                             <Typography variant="h6">Email: {user.email}</Typography>
                                         </Grid>
                                         <Grid item xs={4}>
-                                            {user.img && (
+                                            {user.img ? (
                                                 <Box
                                                     component="img"
                                                     src={user.img}
                                                     alt="Profile"
                                                     sx={{ width: 150, height: 150, borderRadius: '50%' }}
                                                 />
+                                            ) : (
+                                                <Avatar
+                                                src={"/Users/ahmedhenine/Desktop/fitness/src/imgs/pfp.png"}
+                                                    sx={{ width: 150, height: 150, borderRadius: '50%' }}
+                                                />
                                             )}
                                         </Grid>
+
                                     </Grid>
                                 </CardContent>
                             </Card>
@@ -433,14 +441,6 @@ const handleRemoveProfilePic = async () => {
                         <Button onClick={handleRemoveProfilePic} variant="outlined" color="error">
                             User wants to change profile pic
                         </Button>
-                        {editableUser.selectedImage && (
-                                    <Box
-                                        component="img"
-                                        src={editableUser.selectedImage}
-                                        alt="Profile"
-                                        sx={{ width: 150, height: 150, borderRadius: '50%' }}
-                                    />
-                                )}
                             <DialogContentText>
                             <TextField
                                     margin="dense"
