@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { getDatabase, onValue, ref, set } from 'firebase/database';
+import { getDatabase, onValue, ref, get, set } from 'firebase/database';
 import { useNavigate } from 'react-router-dom';
+import { getStorage, ref as storageRef, uploadString, getDownloadURL } from 'firebase/storage';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -16,11 +17,13 @@ import SideBar from "../components/Sidebar";
 import Spinner from '../components/Spinner';
 import Alert from '@mui/material/Alert';
 
-const MAX_IMAGE_SIZE = 7 * 1024 * 1024;
+const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
 
 const Profile = () => {
     const navigate = useNavigate();
     const [error, setError] = useState('')
+    const db = getDatabase();
+    const storage = getStorage();
 
     const { currentUser, firebaseInitialized } = useAuth();
     const [img, setSelectedImage] = useState('');
@@ -39,29 +42,45 @@ const Profile = () => {
         useEffect(() => {
             const currentUserID = currentUser?.uid;
             window.scrollTo(0, 0);
-            
+    
             if (!currentUserID) {
-            return;
+                return;
             }
-
-            const dbRef = ref(getDatabase(), `Users/${currentUserID}`);
+    
+            // Fetch user data from Realtime Database
+            const dbRef = ref(db, `Users/${currentUserID}`);
             onValue(dbRef, (snapshot) => {
-            const data = snapshot.val();
-            if (data) { // check if data is not null or undefined
-                setSelectedImage(data.img); 
-                setFname(data.fname); 
-                setLname(data.lname);
-                setGender(data.gender);
-                setPhoneNumber(data.phone);
-                setEmail(data.email);
-                setMembership(data.membershipType);
-                setStart(data.startDate);
-                setExpiry(data.expiryDate);
-                setPaid(data.totalPaid);
-                setDebt(data.debts);
-            }
+                const data = snapshot.val();
+                if (data) {
+                    // Update state with user data
+                    setFname(data.fname);
+                    setLname(data.lname);
+                    setGender(data.gender);
+                    setPhoneNumber(data.phone);
+                    setEmail(data.email);
+                    setMembership(data.membershipType);
+                    setStart(data.startDate);
+                    setExpiry(data.expiryDate);
+                    setPaid(data.totalPaid);
+                    setDebt(data.debts);
+                }
             });
-        }, [currentUser?.uid]);
+    
+            // Fetch user image from Firebase Storage
+            const fetchUserImage = async () => {
+                const imgRef = storageRef(storage, `user_images/${currentUserID}`);
+                try {
+                    const imgURL = await getDownloadURL(imgRef);
+                    setSelectedImage(imgURL);
+                } catch (error) {
+                    setError('Error fetching user image. Add one if you havent yet !');
+                    console.error('Error fetching user image:', error);
+                }
+            };
+    
+            fetchUserImage();
+    
+        }, [currentUser?.uid, db, storage]);
 
     if (!firebaseInitialized) {
         return( 
@@ -90,14 +109,65 @@ const Profile = () => {
     };
 
     // Save the changes and push to Database
-    const handleSave = (event) => {
+    const handleSave = async (event) => {
         event.preventDefault();
         const currentUserID = currentUser?.uid;
-        const userRef = ref(getDatabase(), `Users/${currentUserID}`);
+        if (!currentUserID) {
+            setError('User is not authenticated');
+            return;
+        }
+    
+        // Initialize Firebase services
+        const storage = getStorage();
+        const db = getDatabase();
+        const userRef = ref(db, `Users/${currentUserID}`);
+    
+        // Fetch the current image URL from the database
+        let imageURL = '';
+        try {
+            const snapshot = await get(ref(db, `Users/${currentUserID}/img`));
+            if (snapshot.exists()) {
+                imageURL = snapshot.val();
+            }
+        } catch (error) {
+            setError('Error fetching current image URL');
+            console.error('Error fetching current image URL:', error.message, error.code);
+            return;
+        }
+    
+        // Check if all required fields are present and not empty
+        const requiredFields = ['img', 'fname', 'lname', 'gender', 'membershipType', 'email', 'phone', 'startDate', 'expiryDate', 'totalPaid', 'debts'];
+        let allFieldsExist = true;
+        for (const field of requiredFields) {
+            const snapshot = await get(ref(db, `Users/${currentUserID}/${field}`));
+            if (!snapshot.exists() || !snapshot.val()) {
+                allFieldsExist = false;
+                break;
+            }
+        }
+
+        if (allFieldsExist) {
+            navigate('/');
+        }
+        else {
+        // Upload the new image to Firebase Storage, if there's a new image
+        if (img) {
+            const imgRef = storageRef(storage, `user_images/${currentUserID}`);
+            try {
+                const uploadResult = await uploadString(imgRef, img, 'data_url');
+                imageURL = await getDownloadURL(uploadResult.ref);
+            } catch (error) {
+                setError('Error uploading image:');
+                console.error('Error uploading image:', error.message, error.code);
+                return;
+            }
+        }
+    
+        // Save the image URL and other user data to Realtime Database
         const newData = {
-            img: img || '',
+            img: imageURL || '', // Save the image URL
             fname: fname || '',
-            lname: lname || '', 
+            lname: lname || '',
             gender: gender || '',
             membershipType: membershipType || '',
             email: email || '',
@@ -107,10 +177,17 @@ const Profile = () => {
             totalPaid: totalPaid || '',
             debts: debts || '',
         };
-        set(userRef, newData);
-        navigate('/');
-
+    
+        try {
+            await set(userRef, newData);
+            navigate('/');
+        } catch (error) {
+            setError('Error saving user data');
+            console.error('Error saving user data:', error.message, error.code);
+        }
+    }
     };
+    
 
     return(
         <div>

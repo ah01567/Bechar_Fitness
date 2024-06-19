@@ -198,10 +198,10 @@ const Admin = () => {
                                             <Typography variant="h6">Email: {user.email}</Typography>
                                         </Grid>
                                         <Grid item xs={4}>
-                                            {user.selectedImage && (
+                                            {user.img && (
                                                 <Box
                                                     component="img"
-                                                    src={user.selectedImage}
+                                                    src={user.img}
                                                     alt="Profile"
                                                     sx={{ width: 150, height: 150, borderRadius: '50%' }}
                                                 />
