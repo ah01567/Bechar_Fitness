@@ -149,6 +149,7 @@ const Profile = () => {
         if (allFieldsExist) {
             navigate('/');
         }
+        
         else {
         // Upload the new image to Firebase Storage, if there's a new image
         if (img) {
@@ -246,7 +247,6 @@ const Profile = () => {
                                     value={fname}
                                     //onChange={(e) => setFname(e.target.value)}
                                     autoFocus
-                                    disabled
                                 />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
@@ -259,7 +259,6 @@ const Profile = () => {
                                     value={lname}
                                     //onChange={(e) => setLname(e.target.value)}
                                     autoComplete="family-name"
-                                    disabled
                                 />
                                 </Grid>
                                 <Grid item xs={12}>
@@ -269,7 +268,7 @@ const Profile = () => {
                                     id="phoneNumber"
                                     label="Phone Number"
                                     value={phone}
-                                    onChange={(e) => setPhoneNumber(e.target.value)}
+                                    //onChange={(e) => setPhoneNumber(e.target.value)}
                                     //disabled={!isEditing}
                                 />
                                 </Grid>
@@ -283,7 +282,6 @@ const Profile = () => {
                                     autoComplete="email"
                                     value={email}
                                     //onChange={(e) => setEmail(e.target.value)}
-                                    disabled
                                     
                                 />
                             </Grid>
@@ -296,7 +294,6 @@ const Profile = () => {
                                     value={gender}
                                     label="Gender"
                                     onChange={(e) => setGender(e.target.value)}
-                                    disabled
                                     >
                                         <MenuItem value="Female">Female</MenuItem>
                                         <MenuItem value="Male">Male</MenuItem>
@@ -313,7 +310,6 @@ const Profile = () => {
                                     value={membershipType}
                                     label="Membership type"
                                     onChange={(e) => setMembership(e.target.value)}
-                                    disabled
                                     >
                                         <MenuItem value="Bodybuilding">Bodybuilding</MenuItem>
                                         <MenuItem value="Cardio">Cardio </MenuItem>
@@ -336,7 +332,6 @@ const Profile = () => {
                                     label="Start date"
                                     //onChange={(e) => setStart(e.target.value)}
                                     autoFocus
-                                    disabled
                                 />
                             </Grid>
                             <Grid item xs={12} sm={6}>
@@ -351,7 +346,6 @@ const Profile = () => {
                                     value={expiryDate}
                                     //onChange={(e) => setExpiry(e.target.value)}
                                     autoFocus
-                                    disabled
                                 />
                             </Grid>
 
@@ -366,7 +360,6 @@ const Profile = () => {
                                     value={totalPaid}
                                     //onChange={(e) => setPaid(e.target.value)}
                                     autoFocus
-                                    disabled
                                     sx={{
                                         '& .MuiInputBase-input': {
                                             color: 'green',
@@ -394,7 +387,6 @@ const Profile = () => {
                                     value={debts}
                                     //onChange={(e) => setDebt(e.target.value)}
                                     autoFocus
-                                    disabled
                                     sx={{
                                         '& .MuiInputBase-input': {
                                             color: 'red',

@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Card, CardContent, Container, CssBaseline, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, Grid, TextField, MenuItem, ThemeProvider, Typography, createTheme } from '@mui/material';
 import { ref, onValue, getDatabase, set, remove } from 'firebase/database';
+import { getStorage, ref as storageRef, deleteObject } from "firebase/storage";
 import Alert from '@mui/material/Alert';
 
 const Admin = () => {
     const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
     const [pendingUsers, setPendingUsers] = useState([]);
     const [users, setUsers] = useState([]);
     const [open, setOpen] = useState(false);
@@ -68,6 +70,41 @@ const Admin = () => {
             [name]: value,
         }));
     };
+
+    // Function to handle the removal of the profile picture
+const handleRemoveProfilePic = async () => {
+
+    // Initialize Firebase services
+    const storage = getStorage();
+    const db = getDatabase();
+    const userImageRef = storageRef(storage, `user_images/${editableUser.uid}`);
+    const userRef = ref(db, `Users/${editableUser.uid}/img`);
+
+    // Remove the image from Firebase Storage
+    try {
+        await deleteObject(userImageRef);
+
+    } catch (error) {
+        setError('Error deleting image from storage');
+        console.log(`user_images/${editableUser.uid}`);
+        console.error('Error deleting image from storage:', error.message, error.code);
+        return;
+    }
+
+    // Remove the image URL from the database
+    try {
+        await set(userRef, null);
+        setEditableUser({ ...editableUser, img: null });
+        setSuccess('Profile picture successfully deleted !');
+        handleClose();
+    } catch (error) {
+        setError('Error removing image URL from database');
+        console.error('Error removing image URL from database:', error.message, error.code);
+        return;
+    }
+
+    setEditableUser({ ...editableUser, img: null });
+};
 
     const handlePendingSave = () => {
         if (selectedUser) {
@@ -255,7 +292,7 @@ const Admin = () => {
                 {selectedUser && (
                     <Dialog open={open} onClose={handleClose}>
                         <DialogTitle>Edit User Information</DialogTitle>
-                        {error && <Alert severity="error" onClose={() => setError('')}>{error}</Alert> }    
+                        {error && <Alert severity="error" onClose={() => setError('')}>{error}</Alert> }   
                         <DialogContent>
                         {editableUser.selectedImage && (
                                     <Box
@@ -390,8 +427,12 @@ const Admin = () => {
                 {selectedFromAllUser && (
                     <Dialog open={open} onClose={handleClose}>
                         <DialogTitle>Edit User Information</DialogTitle>
-                        {error && <Alert severity="error" onClose={() => setError('')}>{error}</Alert> }    
+                        {error && <Alert severity="error" onClose={() => setError('')}>{error}</Alert> }
+                        {success && <Alert severity="success" onClose={() => setSuccess('')}>{success}</Alert> }       
                         <DialogContent>
+                        <Button onClick={handleRemoveProfilePic} variant="outlined" color="error">
+                            User wants to change profile pic
+                        </Button>
                         {editableUser.selectedImage && (
                                     <Box
                                         component="img"
@@ -427,6 +468,7 @@ const Admin = () => {
                                     fullWidth
                                     variant="standard"
                                     value={editableUser.phone || ''}
+                                    onChange={handleChange}
                                 />
                                 <TextField
                                     margin="dense"
