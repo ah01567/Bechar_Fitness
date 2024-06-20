@@ -67,6 +67,7 @@ const Register = () => {
                             .then(() => {
                                 // Take user to home page
                                 navigate("/");
+                                console.log('User was successfully registered in the DB');
                             })
                             .catch((error) => {
                                 console.error("Error adding user to Users DB:", error);

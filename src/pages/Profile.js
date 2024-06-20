@@ -21,10 +21,11 @@ const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
 
 const Profile = () => {
     const navigate = useNavigate();
-    const [error, setError] = useState('')
     const db = getDatabase();
     const storage = getStorage();
 
+    const [error, setError] = useState('')
+    const [isSaving, setIsSaving] = useState(false);
     const { currentUser, firebaseInitialized } = useAuth();
     const [img, setSelectedImage] = useState('');
     const [fname, setFname] = useState('');
@@ -111,9 +112,11 @@ const Profile = () => {
     // Save the changes and push to Database
     const handleSave = async (event) => {
         event.preventDefault();
+        setIsSaving(true);
         const currentUserID = currentUser?.uid;
         if (!currentUserID) {
             setError('User is not authenticated');
+            setIsSaving(false);
             return;
         }
     
@@ -132,6 +135,7 @@ const Profile = () => {
         } catch (error) {
             setError('Error fetching current image URL');
             console.error('Error fetching current image URL:', error.message, error.code);
+            setIsSaving(false);
             return;
         }
     
@@ -148,6 +152,7 @@ const Profile = () => {
 
         if (allFieldsExist) {
             navigate('/');
+            setIsSaving(false);
         }
         
         else {
@@ -160,6 +165,7 @@ const Profile = () => {
             } catch (error) {
                 setError('Error uploading image:');
                 console.error('Error uploading image:', error.message, error.code);
+                setIsSaving(false);
                 return;
             }
         }
@@ -182,6 +188,7 @@ const Profile = () => {
         try {
             await set(userRef, newData);
             navigate('/');
+            setIsSaving(false);
         } catch (error) {
             setError('Error saving user data');
             console.error('Error saving user data:', error.message, error.code);
@@ -412,6 +419,7 @@ const Profile = () => {
                                     color="success"
                                     onClick={handleSave}
                                     sx={{ bgcolor: 'green', width: '100%' }}
+                                    disabled={isSaving}
                                 >
                                     Save
                                 </Button>
