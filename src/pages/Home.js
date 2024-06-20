@@ -6,6 +6,7 @@ import Spinner from '../components/Spinner';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { QRCodeCanvas } from 'qrcode.react';
+import Button from '@mui/material/Button';
 
 const Home = () => {
     const { currentUser, firebaseInitialized } = useAuth();
@@ -17,6 +18,10 @@ const Home = () => {
             </div>
         )
       } 
+
+    const handleRefresh = () => {
+        window.location.reload();
+    };
 
     return(
         <div>
@@ -37,6 +42,14 @@ const Home = () => {
                     </CardContent>
                     </Card>
                     <h3>Scan the above QR code</h3>
+                    <Button
+                        variant="contained"
+                        color="success"
+                         onClick={handleRefresh}
+                        sx={{ bgcolor: 'steelblue', color: 'white', width: '30%' }}
+                    >
+                        Refresh
+                    </Button>
               </div>
                 </div>
             )}

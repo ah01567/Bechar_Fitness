@@ -28,10 +28,8 @@ const Login = () => {
         signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             // Signed in
-            const user = userCredential.user;
             navigate("/")
-            console.log('User has successfully logged in');
-            console.log(user);
+            console.log('User has successfully logged in')
         })
         .catch((error) => {
           console.log(error.code);

@@ -6,6 +6,7 @@ import Home from './pages/Home';
 import Profile from './pages/Profile';
 import Policy from './pages/Policy';
 import Admin from './pages/Admin';
+import History from './pages/History';
 
 
 const App = () => {
@@ -19,6 +20,7 @@ const App = () => {
               <Route path="/register" element={<Register />} />
               <Route path="/" element={<Home />} />
               <Route path="/profile" element={<Profile />} />
+              <Route path="/history" element={<History />} />
               <Route path="/policy" element={<Policy />} />
               <Route path="/admin" element={<Admin />} />
             </Routes>
