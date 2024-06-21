@@ -5,6 +5,7 @@ import { auth } from '../firebase';
 import { signOut } from 'firebase/auth';
 import { Divider, IconButton } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
+import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
 import HomeIcon from '@mui/icons-material/Home';
 import HistoryIcon from '@mui/icons-material/History';
 import List from '@mui/material/List';
@@ -46,14 +47,15 @@ const SideBar = () => {
             {isOpen && (
             <div style={{backgroundColor: 'White'}}>
             <List>
-                {['Home', 'Profile', 'History', 'Policy'].map((text, index) => (
+                {['Administration', 'Home', 'Profile', 'History', 'Policy'].map((text, index) => (
                     <ListItem key={text} disablePadding>
-                    <ListItemButton onClick={() => navigate(index === 0 ? '/' : index === 1 ? '/profile' : index === 2 ? '/history' : '/policy')}>
+                    <ListItemButton onClick={() => navigate(index === 0 ? '/admin' : index === 1 ? '/' : index === 2 ? '/profile' : index === 3 ? '/history' : '/policy')}>
                         <ListItemIcon>
-                        {index === 0 ? <HomeIcon fontSize="large"/> : 
-                        index === 1 ? <AccountCircleIcon fontSize="large"/> : 
-                        index === 2 ? <HistoryIcon fontSize="large"/> : 
-                        index === 3 ? <PolicyIcon fontSize="large"/> : null}
+                        {index === 0 ? <SupervisorAccountIcon  fontSize="large"/> : 
+                        index === 1 ? <HomeIcon fontSize="large"/> : 
+                        index === 2 ? <AccountCircleIcon fontSize="large"/> : 
+                        index === 3 ? <HistoryIcon fontSize="large"/> : 
+                        index === 4 ? <PolicyIcon fontSize="large"/> : null}
                         </ListItemIcon>
                         <ListItemText primary={text} />
                     </ListItemButton>
