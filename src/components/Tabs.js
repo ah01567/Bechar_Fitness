@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box, Tabs, Tab, Typography } from '@mui/material';
+import Overall from '../adminComponents/Overall'; 
 import AllMemberships from '../adminComponents/AllMemberships'; 
 import PendingMemberships from '../adminComponents/PendingMemberships'; 
 
@@ -26,7 +27,7 @@ export default function ScrollableTabsButtonAuto() {
       
       <Box sx={{ marginTop: '20px'}}>
         {value === 0 && <Typography>
-          Overall
+          <Overall />
         </Typography>}
 
         {value === 1 && <Typography>
