@@ -1,35 +1,37 @@
 import * as React from 'react';
 import { PieChart, pieArcLabelClasses } from '@mui/x-charts/PieChart';
+import { Card } from '@mui/material';
 
 const data = [
-  { value: 5, label: 'A' },
-  { value: 10, label: 'B' },
-  { value: 15, label: 'C' },
-  { value: 20, label: 'D' },
+  { value: 30, label: 'Males' },
+  { value: 70, label: 'Females' },
 ];
 
 const size = {
-  width: 400,
-  height: 200,
+  width: 350,
+  height: 450,
 };
 
 export default function Genderpiechart() {
   return (
-    <PieChart
-      series={[
-        {
-          arcLabel: (item) => `${item.label} (${item.value})`,
-          arcLabelMinAngle: 45,
-          data,
-        },
-      ]}
-      sx={{
-        [`& .${pieArcLabelClasses.root}`]: {
-          fill: 'white',
-          fontWeight: 'bold',
-        },
-      }}
-      {...size}
-    />
+    <Card style={{ marginTop: '20px' }}>
+      <h3 style={{ textAlign: 'center' }}>Gender percentage (%)</h3>
+      <PieChart 
+        series={[
+          {
+            arcLabel: (item) => `${item.label} (${item.value})`,
+            arcLabelMinAngle: 45,
+            data,
+          },
+        ]}
+        sx={{
+          [`& .${pieArcLabelClasses.root}`]: {
+            fill: 'white',
+            fontWeight: 'bold',
+          },
+        }}
+        {...size}
+      />
+    </Card>
   );
 }

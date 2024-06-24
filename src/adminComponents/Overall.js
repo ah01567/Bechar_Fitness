@@ -25,14 +25,18 @@ const Overall = () => {
                 <div><Login /></div>
             ) : (
                 <div>
-
-                    
                     <div>
                         < UsersData />
+                        <h3 style={{marginTop:'10px'}}>The following statistics represent both: the Memberships' current 
+                            statistics and the Gender percentage:
+                        </h3>
                         <div style={{ display: 'flex', gap: '16px' }}> 
                             < MembershipTypesBarChart />
                             < Genderpiechart />
                         </div>
+                        <h3 style={{marginTop:'10px'}}>The following line graph demonstrates the number of people accessing
+                            the gym daily:
+                        </h3>
                         < DemographyLineGraph />
                     </div>
                 </div>
