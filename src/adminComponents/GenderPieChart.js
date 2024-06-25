@@ -3,8 +3,8 @@ import { PieChart, pieArcLabelClasses } from '@mui/x-charts/PieChart';
 import { Card } from '@mui/material';
 
 const data = [
-  { value: 30, label: 'Males' },
-  { value: 70, label: 'Females' },
+  { value: 30, label: 'Males', color: 'green'  },
+  { value: 70, label: 'Females', color: 'red'  },
 ];
 
 const size = {

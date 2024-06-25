@@ -4,12 +4,12 @@ import { Card } from '@mui/material';
 
 export default function DemographyLineGraph() {
   return (
-    <Card style={{ marginTop: '20px'}}>
+    <Card style={{ marginTop: '20px' }}>
       <LineChart
-        xAxis={[{ data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] }]}
+        xAxis={[{ data: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'], scaleType: 'band' }]}
         series={[
           {
-            data: [2, 3, 5.5, 8.5, 1.5, 5, 1, 4, 3, 8],
+            data: [2, 3, 5.5, 8.5, 1.5, 5, 1],
             showMark: ({ index }) => index % 2 === 0,
           },
         ]}

@@ -8,7 +8,7 @@ export default function MembershipTypesBarChart() {
     <Card style={{ marginTop: '20px', width: '70%'}}>
       <BarChart
         xAxis={[{ scaleType: 'band', data: ['Bodybuilding', 'Cardio', 'BodyB & Cardio', 'BodyB with coach', 'BodyB&Cardio-coach', 'Women'] }]}
-        series={[{ data: [5, 2, 6, 7, 8, 1] }]}
+        series={[{ data: [5, 2, 6, 7, 8, 1], color: 'SteelBlue'  }]}
         width={900}
         height={500}
       />
